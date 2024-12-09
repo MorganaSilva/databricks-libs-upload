@@ -58,4 +58,42 @@ If you have a custom library, you can upload it in two ways:
    ```bash
    %pip install /dbfs/FileStore/libraries/library.whl
    ```
-   
+
+---
+
+## 4. Installing Dependencies on Notebooks
+
+If you want to install libraries directly on a notebook:
+
+### a) Use `%pip` for Python libraries:
+   ```pyhon
+      %pip install nome-da-biblioteca
+   ```
+
+### b) For Java/Scala dependencies, use an `init script` or configure the cluster.
+
+---
+
+## 5. Using Init Scripts
+
+To manage complex dependencies or install libraries before the cluster starts:
+
+1. Create an *init script* with the necessary commands (example to install packages via `apt` or `pip`).
+2. Upload the script to DBFS:
+   ```bash
+   dbutils.fs.put("/databricks/init/myscript.sh", "conteúdo_do_script", True)
+   ```
+3. Configure the cluster to use the script in *Advanced Options > Init Scripts*.
+
+---
+
+## 6. Using Version Control Repositories
+
+If the library is in a Git repository, such as GitHub, you can clone it directly into Databricks:
+
+1. Configure Git in Repos.
+2. Clone the repository with the command:
+   ```
+   %sh git clone https://github.com/user/repo.git
+   ```
+3. Install the library with `%pip install` or use it directly in your code.
