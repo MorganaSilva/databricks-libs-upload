@@ -74,7 +74,7 @@ If you want to install libraries directly on a notebook:
 
 ---
 
-## 5. Using Init Scripts
+## 5. Using Init Scripts [Link Text](#creating-an-init-script-in-databricks).
 
 To manage complex dependencies or install libraries before the cluster starts:
 
@@ -97,3 +97,85 @@ If the library is in a Git repository, such as GitHub, you can clone it directly
    %sh git clone https://github.com/user/repo.git
    ```
 3. Install the library with `%pip install` or use it directly in your code.
+
+---
+
+---
+
+# Creating an Init Script in Databricks
+
+**Init scripts** in Databricks are scripts that run when clusters are initialized, allowing you to configure the environment, install packages, or perform other customizations.
+
+---
+
+## 1. Creating the Init Script
+
+Init scripts can be written in **bash** (for Linux-based clusters). A simple example:
+
+```bash
+#!/bin/bash
+# Example of an Init Script
+echo "Installing required packages on the cluster"
+
+# Install packages via apt (if necessary)
+sudo apt-get update
+sudo apt-get install -y package1 package2
+
+# Install Python packages via pip
+/databricks/python/bin/pip install package-name
+
+# Setting environment variables
+export MY_ENV_VAR="value"
+```
+---
+
+## 2. Fazer Upload do Script para o DBFS
+
+Os scripts precisam estar acessíveis no **Databricks File System (DBFS)**.
+
+### a) No notebook ou terminal Databricks, execute:
+
+```python
+dbutils.fs.put("/databricks/init/myscript.sh", """
+#!/bin/bash
+echo "Iniciando configuração"
+sudo apt-get update
+sudo apt-get install -y curl
+/databricks/python/bin/pip install requests
+""", True)
+```
+
+### b) Make sure to set the execute permission on the script:
+
+```
+chmod +x /databricks/init/myscript.sh
+```
+
+---
+
+## 3. Configure the Cluster to Use the Init Script
+
+1. Go to Databricks **Compute** and select the cluster.
+2. Go to the **Advanced Options > Init Scripts** section.
+3. Click **Add** and enter the path to the script in DBFS:
+   ```
+   dbfs:/databricks/init/myscript.sh
+   ```
+4. Save the changes and restart the cluster to apply the script.
+
+---
+
+## 4. Test the Init Script
+
+After starting the cluster, check the logs to ensure that the script ran correctly:
+
+1. Go to **Clusters > Event Logs** or **Driver Logs**.
+2. Look for output messages from the init script (example: `echo` statements).
+
+---
+
+## Advice
+
+- **Debugging:** Include `echo` messages in the script to make debugging easier.
+- **Security:** Avoid inserting sensitive data directly into the script. Use environment variables or secret management services.
+- **Compatibility:** Make sure the script is compatible with the version of the Databricks environment (e.g. Python or Ubuntu version).
