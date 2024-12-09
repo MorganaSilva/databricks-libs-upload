@@ -74,7 +74,7 @@ If you want to install libraries directly on a notebook:
 
 ---
 
-## 5. Using Init Scripts [Link Text](#creating-an-init-script-in-databricks).
+## 5. Using Init Scripts [](#creating-an-init-script-in-databricks).
 
 To manage complex dependencies or install libraries before the cluster starts:
 
