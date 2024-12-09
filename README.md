@@ -13,3 +13,9 @@ If you need a Java/Scala library hosted in a Maven repository, follow the steps 
 2. Click on **Compute** and select the cluster where you want to add the library.
 3. Click on the **Libraries** tab and click on **Install New**.
 4. Choose the **Maven** option and provide the **artifact ID** in the format:
+   
+    groupId:artifactId:version
+   
+Exemplo para o Spark XML:
+
+  com.databricks:spark-xml_2.12:0.15.0
